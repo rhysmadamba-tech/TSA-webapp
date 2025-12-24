@@ -24,11 +24,42 @@ function dismissSplash() {
 
 enterBtn?.addEventListener("click", dismissSplash);
 
-// Optional: allow Enter or Esc key on splash
+// Allow Enter or Esc key on splash
 document.addEventListener("keydown", (e) => {
   if (!splash) return;
   if (e.key === "Enter" || e.key ==="Escape") dismissSplash();
 });
+
+// Dynamic Cursor Effect
+const cursorLight = document.getElementById("cursor-light");
+
+let mouseX = 0;
+let mouseY = 0;
+let currentX = 0;
+let currentY = 0;
+
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  document.body.classList.add("cursor-active");
+});
+
+document.addEventListener("mouseleave", () => {
+  document.body.classList.remove("cursor-active");
+});
+
+// Smooth trailing motion
+function animateLight() {
+  currentX += (mouseX - currentX) * 0.12;
+  currentY += (mouseY - currentY) * 0.12;
+
+  if (cursorLight) {
+    cursorLight.style.transform = `translate(${currentX}px, ${currentY}px)`;
+  }
+
+  requestAnimationFrame(animateLight);
+}
+
 
 // Filtering
 function normalize(str) {
@@ -89,3 +120,4 @@ searchInput?.addEventListener("input", updateResults);
 
 // Initial state
 updateResults();
+animateLight();
